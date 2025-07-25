@@ -405,7 +405,6 @@ a:focus {
     text-align: center;
     width: 100%;
     word-wrap: break-word;
-    hyphens: auto;
 }
 
 .hero-description {
