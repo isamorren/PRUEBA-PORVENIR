@@ -189,10 +189,12 @@ a:focus {
 .header {
     background-color: var(--white);
     box-shadow: 0 1px 0 rgba(0,0,0,0.08);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
     z-index: 1000;
-    transition: var(--transition-base);
+    transition: transform 0.3s ease;
 }
 
 .navbar {
@@ -352,13 +354,13 @@ a:focus {
 
 /* Sección Hero */
 .hero {
-    padding: 3rem 0;
+    padding: 6rem 0 3rem 0; /* Compensar el header fijo */
     background-color: var(--bg-main);
     background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.3)), url('../images/header.jpg');
     background-size: cover;
     background-position: 65% center;
     background-repeat: no-repeat;
-    min-height: 70vh;
+    min-height: 100vh;
     display: flex;
     align-items: center;
     position: relative;

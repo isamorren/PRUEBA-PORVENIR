@@ -193,5 +193,68 @@ document.addEventListener('DOMContentLoaded', function() {
     window.addEventListener('scroll', highlightActiveSection);
     
     highlightActiveSection();
+    
+    // Control del header: visible al inicio, se oculta/muestra según scroll
+    const header = document.querySelector('.header');
+    let lastScrollTop = 0;
+    let scrollTimeout;
+    let isHeaderHidden = false;
+    
+    window.addEventListener('scroll', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const heroHeight = document.querySelector('.hero').offsetHeight;
+        
+        // Si estamos en la parte superior de la página, mostrar header siempre
+        if (scrollTop < heroHeight * 0.5) {
+            header.style.transform = 'translateY(0)';
+            isHeaderHidden = false;
+            clearTimeout(scrollTimeout);
+        } else {
+            // Detectar dirección del scroll
+            if (scrollTop > lastScrollTop) {
+                // Scrolling hacia abajo - ocultar header
+                if (!isHeaderHidden) {
+                    header.style.transform = 'translateY(-100%)';
+                    isHeaderHidden = true;
+                }
+            } else {
+                // Scrolling hacia arriba - mostrar header temporalmente
+                header.style.transform = 'translateY(0)';
+                isHeaderHidden = false;
+                
+                // Ocultar después de 3 segundos sin actividad
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(() => {
+                    // Solo ocultar si no estamos en hover y no estamos cerca del top
+                    if (!header.matches(':hover') && scrollTop > heroHeight * 0.5) {
+                        header.style.transform = 'translateY(-100%)';
+                        isHeaderHidden = true;
+                    }
+                }, 3000);
+            }
+        }
+        
+        lastScrollTop = scrollTop;
+    });
+    
+    // Mantener header visible mientras el mouse está sobre él
+    header.addEventListener('mouseenter', function() {
+        clearTimeout(scrollTimeout);
+        header.style.transform = 'translateY(0)';
+        isHeaderHidden = false;
+    });
+    
+    header.addEventListener('mouseleave', function() {
+        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        const heroHeight = document.querySelector('.hero').offsetHeight;
+        
+        // Si estamos lejos del top, programar ocultación
+        if (scrollTop > heroHeight * 0.5) {
+            scrollTimeout = setTimeout(() => {
+                header.style.transform = 'translateY(-100%)';
+                isHeaderHidden = true;
+            }, 2000);
+        }
+    });
 });
 
